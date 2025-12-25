@@ -13,53 +13,72 @@ export type OtherProductResult = {
 };
 
 /**
- * Get OtherProducts by category, productType, and optionally subType
+ * Get OtherProducts with flexible filtering and pagination
+ * All parameters are optional - if not provided, that filter is not applied
  */
 export async function getOtherProducts(
-  category: string,
-  productType: string,
-  subType?: string | null
-): Promise<OtherProductResult[]> {
+  category?: string | null,
+  productType?: string | null,
+  subType?: string | null,
+  skip: number = 0,
+  take: number = 20
+): Promise<{ products: OtherProductResult[]; hasMore: boolean; total: number }> {
   try {
-    // Build where clause based on whether subType is provided
+    // Build where clause dynamically based on provided filters
     const whereClause: any = {
       AND: [
-        { categoryName: category },
-        { productType: productType },
         { isDeleted: false },
       ],
     };
 
-    // If subType is provided (not null/undefined/empty), filter by it
-    // Otherwise, filter for products where subType is null or empty string
-    if (subType !== undefined && subType !== null && subType !== "") {
-      whereClause.AND.push({ subType: subType });
-    } else {
-      whereClause.AND.push({
-        OR: [{ subType: subType}, { subType: "" }],
-      });
+    // Add category filter if provided
+    if (category && category.trim() !== "") {
+      whereClause.AND.push({ categoryName: category });
     }
 
+    // Add productType filter if provided
+    if (productType && productType.trim() !== "") {
+      whereClause.AND.push({ productType: productType });
+    }
+
+    // Add subType filter if provided
+    if (subType !== undefined && subType !== null && subType.trim() !== "") {
+      whereClause.AND.push({ subType: subType });
+    }
+
+    // Get total count for pagination
+    const total = await prisma.otherProduct.count({
+      where: whereClause,
+    });
+
+    // Fetch paginated products
     const products = await prisma.otherProduct.findMany({
       where: whereClause,
       orderBy: {
         createdAt: "desc",
       },
+      skip,
+      take,
     });
-    console.log("its saved Products", products);
 
-    return products.map((product) => ({
-      id: product.id,
-      categoryName: product.categoryName,
-      productType: product.productType,
-      subType: product.subType,
-      images: product.images,
-      createdAt: product.createdAt,
-      updatedAt: product.updatedAt,
-    }));
+    const hasMore = skip + take < total;
+
+    return {
+      products: products.map((product) => ({
+        id: product.id,
+        categoryName: product.categoryName,
+        productType: product.productType,
+        subType: product.subType,
+        images: product.images,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
+      })),
+      hasMore,
+      total,
+    };
   } catch (error) {
     console.error("Error fetching other products:", error);
-    return [];
+    return { products: [], hasMore: false, total: 0 };
   }
 }
 
