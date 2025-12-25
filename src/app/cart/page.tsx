@@ -19,8 +19,8 @@ export default async function CartRoutePage() {
 
   return (
     <>
-      <SiteHeader />
-      <CartPage cart={cart} />
+      {/* <SiteHeader />
+      <CartPage cart={cart} /> */}
     </>
   )
 }
