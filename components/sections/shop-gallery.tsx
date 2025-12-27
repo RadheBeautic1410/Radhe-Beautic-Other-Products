@@ -10,8 +10,8 @@ export function ShopGallery() {
 
   const shopImages = [
     {
-      src: "/radhey-beautic-shop-storefront-welcoming-entrance-.jpg",
-      alt: "Radhe Beautic shop storefront with welcoming entrance",
+      src: "/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg",
+      alt: "Indian Wear Gallery shop storefront with welcoming entrance",
     },
     {
       src: "/shop-interior-kurtis-display-organized-racks-premi.jpg",
@@ -53,7 +53,7 @@ export function ShopGallery() {
     setAutoPlay(false)
   }
 
-  const goToSlide = (index) => {
+  const goToSlide = (index:any) => {
     setCurrentIndex(index)
     setAutoPlay(false)
   }

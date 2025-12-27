@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers. High-quality fabrics, competitive prices, exclusive designs.",
     images: [
       {
-        url: "/radhey-beautic-shop-storefront-welcoming-entrance-.jpg",
+        url: "/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg",
         width: 1200,
         height: 630,
         alt: "Indian Wear Gallery - Premium Wholesale Kurtis Store",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Indian Wear Gallery - Premium Wholesale Kurtis & Ethnic Wear",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers.",
-    images: ["/radhey-beautic-shop-storefront-welcoming-entrance-.jpg"],
+    images: ["/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg"],
     creator: "@radhebeautic", // Update with your actual Twitter handle
   },
   robots: {
@@ -123,9 +123,9 @@ export default function RootLayout({
     "@type": "ClothingStore",
     name: "Indian Wear Gallery",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers",
-    url: "https://radhebeautic.com",
-    logo: "https://radhebeautic.com/placeholder-logo.png",
-    image: "https://radhebeautic.com/radhey-beautic-shop-storefront-welcoming-entrance-.jpg",
+    url: "https://indianweargallery.com",
+    logo: "https://indianweargallery.com/placeholder-logo.png",
+    image: "https://indianweargallery.com/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg",
     address: {
       "@type": "PostalAddress",
       // Update with your actual address

@@ -17,12 +17,12 @@ const sliderImages = [
   //   title: 'Quality Assured',
   //   subtitle: 'Handpicked designs for every occasion',
   // },
-  // {
-  //   src: '/attractive-window-display-seasonal-collection-show.jpg',
-  //   alt: 'Seasonal Collection',
-  //   title: 'Trending Now',
-  //   subtitle: 'Stay in style with our seasonal collections',
-  // },
+   {
+    src: '/attractive-window-display-seasonal-collection-show.jpg',
+    alt: 'Seasonal Collection',
+    title: 'Trending Now',
+    subtitle: 'Stay in style with our seasonal collections',
+  },  
 ]
 
 // Auto-play duration in milliseconds (5 seconds)

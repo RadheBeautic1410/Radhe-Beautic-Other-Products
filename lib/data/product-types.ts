@@ -12,7 +12,10 @@ export const productTypes = [
 /**
  * Subtype mapping based on product type key
  */
-export const productSubTypes: Record<string, Array<{ key: string; value: string }>> = {
+export const productSubTypes: Record<
+  string,
+  Array<{ key: string; value: string }>
+> = {
   sadi: [
     { key: "cotton-sadi", value: "Cotton Sadi" },
     { key: "silk-sadi", value: "Silk Sadi" },
@@ -22,6 +25,8 @@ export const productSubTypes: Record<string, Array<{ key: string; value: string 
     { key: "designer-sadi", value: "Designer Sadi" },
     { key: "printed-sadi", value: "Printed Sadi" },
     { key: "embroidered-sadi", value: "Embroidered Sadi" },
+    { key: "kanjivaram-sadi", value: "Kanjivaram Sadi" },
+    { key: "tussar-sadi", value: "Tussar Sadi" },
   ],
   choli: [
     { key: "backless-choli", value: "Backless Choli" },
@@ -66,11 +71,16 @@ export function getProductTypeDisplayName(key: string): string {
  * Get display name for a product subtype key
  * Returns the formatted display name or the original key if not found
  */
-export function getProductSubTypeDisplayName(subTypeKey: string, productTypeKey?: string): string {
+export function getProductSubTypeDisplayName(
+  subTypeKey: string,
+  productTypeKey?: string
+): string {
   if (!productTypeKey) {
     // Try to find in all subtypes
     for (const subTypes of Object.values(productSubTypes)) {
-      const subType = subTypes.find((st) => st.key === subTypeKey.toLowerCase());
+      const subType = subTypes.find(
+        (st) => st.key === subTypeKey.toLowerCase()
+      );
       if (subType) return subType.value;
     }
     return subTypeKey;
@@ -82,4 +92,3 @@ export function getProductSubTypeDisplayName(subTypeKey: string, productTypeKey?
   const subType = subTypes.find((st) => st.key === subTypeKey.toLowerCase());
   return subType?.value || subTypeKey;
 }
-

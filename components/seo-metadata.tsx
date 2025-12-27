@@ -20,7 +20,7 @@ export function generatePageMetadata({
   description,
   keywords = [],
   path = "/",
-  image = "/radhey-beautic-shop-storefront-welcoming-entrance-.jpg",
+  image = "/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg",
 }: PageSEO): Metadata {
   const baseUrl = "https://radhebeautic.com" // Update with your actual domain
   const fullUrl = `${baseUrl}${path}`
