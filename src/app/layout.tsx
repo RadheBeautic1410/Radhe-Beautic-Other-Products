@@ -20,59 +20,59 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: {
-    default: "Radhe Beautic - Premium Wholesale Kurtis & Ethnic Wear",
-    template: "%s | Radhe Beautic",
-  },
-  description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers. High-quality fabrics, competitive prices, exclusive designs. Contact us for bulk orders.",
-  keywords: [
-    "wholesale kurtis",
-    "wholesale ethnic wear",
-    "bulk kurtis",
-    "kurtis manufacturer",
-    "ethnic wear supplier",
-    "anarkali kurtis wholesale",
-    "palazzo sets wholesale",
-    "embroidered kurtis",
-    "printed kurtis",
-    "cotton kurtis wholesale",
-    "party wear kurtis",
-    "daily wear kurtis",
-    "designer kurtis wholesale",
-    "kurtis supplier",
-    "ethnic clothing wholesale",
-  ],
-  authors: [{ name: "Radhe Beautic" }],
-  creator: "Radhe Beautic",
-  publisher: "Radhe Beautic",
+  // title: {
+  //   default: "Radhe Beautic - Premium Wholesale Kurtis & Ethnic Wear",
+  //   template: "%s | Radhe Beautic",
+  // },
+  // description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers. High-quality fabrics, competitive prices, exclusive designs. Contact us for bulk orders.",
+  // keywords: [
+  //   "wholesale kurtis",
+  //   "wholesale ethnic wear",
+  //   "bulk kurtis",
+  //   "kurtis manufacturer",
+  //   "ethnic wear supplier",
+  //   "anarkali kurtis wholesale",
+  //   "palazzo sets wholesale",
+  //   "embroidered kurtis",
+  //   "printed kurtis",
+  //   "cotton kurtis wholesale",
+  //   "party wear kurtis",
+  //   "daily wear kurtis",
+  //   "designer kurtis wholesale",
+  //   "kurtis supplier",
+  //   "ethnic clothing wholesale",
+  // ],
+  // authors: [{ name: "Radhe Beautic" }],
+  // creator: "Radhe Beautic",
+  // publisher: "Radhe Beautic",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://radhebeautic.com"), // Update with your actual domain
+  metadataBase: new URL("https://www.indianweargallery.in"), // Update with your actual domain
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://radhebeautic.com", // Update with your actual domain
+    url: "https://www.indianweargallery.in", // Update with your actual domain
     siteName: "Radhe Beautic",
-    title: "Radhe Beautic - Premium Wholesale Kurtis & Ethnic Wear",
+    title: "Indian Wear Gallery - Premium Wholesale Kurtis & Ethnic Wear",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers. High-quality fabrics, competitive prices, exclusive designs.",
     images: [
       {
         url: "/radhey-beautic-shop-storefront-welcoming-entrance-.jpg",
         width: 1200,
         height: 630,
-        alt: "Radhe Beautic - Premium Wholesale Kurtis Store",
+        alt: "Indian Wear Gallery - Premium Wholesale Kurtis Store",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Radhe Beautic - Premium Wholesale Kurtis & Ethnic Wear",
+    title: "Indian Wear Gallery - Premium Wholesale Kurtis & Ethnic Wear",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers.",
     images: ["/radhey-beautic-shop-storefront-welcoming-entrance-.jpg"],
     creator: "@radhebeautic", // Update with your actual Twitter handle
@@ -121,7 +121,7 @@ export default function RootLayout({
   const storeSchema = {
     "@context": "https://schema.org",
     "@type": "ClothingStore",
-    name: "Radhe Beautic",
+    name: "Indian Wear Gallery",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers",
     url: "https://radhebeautic.com",
     logo: "https://radhebeautic.com/placeholder-logo.png",
@@ -138,7 +138,7 @@ export default function RootLayout({
       contactType: "Sales",
       // Update with your actual contact information
       telephone: "+91-XXXXX-XXXXX",
-      email: "sales@radhebeautic.com",
+      // email: "sales@radhebeautic.com",
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
@@ -279,7 +279,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://vercel.live" />
       </head>
       <body className={`font-sans ${poppins.variable}`}>
-        <Suspense fallback={<PageLoader message="Loading Radhe Beautic..." />}>
+        <Suspense fallback={<PageLoader message="Loading Indian Clothing..." />}>
           {children}
           <Analytics />
           <Toaster />

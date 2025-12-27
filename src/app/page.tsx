@@ -23,7 +23,7 @@ export default async function HomePage() {
         <footer className="border-t">
           <div className="max-w-6xl mx-auto px-4 py-8 text-sm text-muted-foreground">
             <p className="text-center">
-              © {new Date().getFullYear()} Radhe Beautic · Wholesale & Retail Kurtis · Ethnic Wear
+              © {new Date().getFullYear()}  Retail Kurtis · Ethnic Wear
             </p>
           </div>
         </footer>

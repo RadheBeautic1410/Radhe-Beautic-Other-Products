@@ -41,7 +41,7 @@ export function Testimonials() {
               </span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Join thousands of satisfied customers who trust Radhe Beautic for premium kurtis
+              Join thousands of satisfied customers who trust Indian wear gallary for premium kurtis
             </p>
           </div>
         </Reveal>

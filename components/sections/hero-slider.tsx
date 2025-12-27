@@ -5,24 +5,24 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 
 const sliderImages = [
-  {
-    src: '/radhey-beautic-shop-storefront-welcoming-entrance-.jpg',
-    alt: 'Radhe Beautic - Premium Kurtis Collection',
-    title: 'Premium Kurtis Collection',
-    subtitle: 'Discover our latest ethnic wear collection',
-  },
-  {
-    src: '/shop-interior-kurtis-display-organized-racks-premi.jpg',
-    alt: 'Shop Interior - Organized Display',
-    title: 'Quality Assured',
-    subtitle: 'Handpicked designs for every occasion',
-  },
-  {
-    src: '/attractive-window-display-seasonal-collection-show.jpg',
-    alt: 'Seasonal Collection',
-    title: 'Trending Now',
-    subtitle: 'Stay in style with our seasonal collections',
-  },
+  // {
+  //   src: '/radhey-beautic-shop-storefront-welcoming-entrance-.jpg',
+  //   alt: ' - Premium Kurtis Collection',
+  //   title: 'Premium Kurtis Collection',
+  //   subtitle: 'Discover our latest ethnic wear collection',
+  // },
+  // {
+  //   src: '/shop-interior-kurtis-display-organized-racks-premi.jpg',
+  //   alt: 'Shop Interior - Organized Display',
+  //   title: 'Quality Assured',
+  //   subtitle: 'Handpicked designs for every occasion',
+  // },
+  // {
+  //   src: '/attractive-window-display-seasonal-collection-show.jpg',
+  //   alt: 'Seasonal Collection',
+  //   title: 'Trending Now',
+  //   subtitle: 'Stay in style with our seasonal collections',
+  // },
 ]
 
 // Auto-play duration in milliseconds (5 seconds)
