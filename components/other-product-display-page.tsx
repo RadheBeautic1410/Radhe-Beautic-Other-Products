@@ -5,8 +5,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { SiteHeader } from '@/components/site-header'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import Image from 'next/image'
-import { Download, CheckSquare, Square } from 'lucide-react'
+import { Download, CheckSquare, Square, X } from 'lucide-react'
+import { DialogClose } from '@/components/ui/dialog'
 import { getProductTypeDisplayName, getProductSubTypeDisplayName } from '@/lib/data/product-types'
 
 interface ProductImage {
@@ -143,7 +145,8 @@ function ImageCard({
   cardKey,
   isSelected,
   onSelect,
-  onDownload
+  onDownload,
+  onImageClick
 }: { 
   product: OtherProduct
   image: ProductImage
@@ -152,6 +155,7 @@ function ImageCard({
   isSelected: boolean
   onSelect: (key: string) => void
   onDownload: (url: string, filename: string) => void
+  onImageClick: (product: OtherProduct, image: ProductImage, imageIndex: number) => void
 }) {
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -160,14 +164,26 @@ function ImageCard({
     onDownload(image.url, filename)
   }
 
+  const handleCheckboxChange = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onSelect(cardKey)
+  }
+
+  const handleCardClick = () => {
+    onImageClick(product, image, imageIndex)
+  }
+
   return (
-    <Card className={`group relative overflow-hidden bg-white dark:bg-gray-800 border-2 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1 rounded-2xl ${
-      isSelected 
-        ? 'border-purple-500 dark:border-purple-400 ring-2 ring-purple-500/50' 
-        : 'border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500'
-    }`}>
+    <Card 
+      className={`group relative overflow-hidden bg-white dark:bg-gray-800 border-2 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1 rounded-2xl cursor-pointer ${
+        isSelected 
+          ? 'border-purple-500 dark:border-purple-400 ring-2 ring-purple-500/50' 
+          : 'border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500'
+      }`}
+      onClick={handleCardClick}
+    >
       {/* Checkbox overlay */}
-      <div className="absolute top-2 left-2 z-10">
+      <div className="absolute top-2 left-2 z-10" onClick={handleCheckboxChange}>
         <Checkbox
           checked={isSelected}
           onCheckedChange={() => onSelect(cardKey)}
@@ -246,6 +262,7 @@ export function OtherProductDisplayPage({
   const [hasMore, setHasMore] = useState(initialProducts.length < initialTotal)
   const [skip, setSkip] = useState(initialProducts.length)
   const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set())
+  const [viewingImage, setViewingImage] = useState<{ product: OtherProduct; image: ProductImage; imageIndex: number } | null>(null)
   const observerTarget = useRef<HTMLDivElement>(null)
 
   // Reset state when filters change
@@ -384,6 +401,16 @@ export function OtherProductDisplayPage({
     await downloadMultipleImages(downloadUrls)
   }, [selectedImages, allImageCards])
 
+  // Handle image click to open fullscreen
+  const handleImageClick = useCallback((product: OtherProduct, image: ProductImage, imageIndex: number) => {
+    setViewingImage({ product, image, imageIndex })
+  }, [])
+
+  // Handle close fullscreen viewer
+  const handleCloseViewer = useCallback(() => {
+    setViewingImage(null)
+  }, [])
+
 
   return (
     <>
@@ -489,6 +516,7 @@ export function OtherProductDisplayPage({
                     isSelected={selectedImages.has(key)}
                     onSelect={handleSelectImage}
                     onDownload={handleIndividualDownload}
+                    onImageClick={handleImageClick}
                   />
                 ))}
               </div>
@@ -512,6 +540,32 @@ export function OtherProductDisplayPage({
           )}
         </div>
       </main>
+
+      {/* Fullscreen Image Viewer Dialog */}
+      <Dialog open={!!viewingImage} onOpenChange={(open) => !open && handleCloseViewer()}>
+        <DialogContent 
+          className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 bg-black border-none rounded-none translate-x-[-50%] translate-y-[-50%] top-[50%] left-[50%]"
+          showCloseButton={false}
+        >
+          {viewingImage && (
+            <div className="relative w-full h-full flex items-center justify-center bg-black">
+              <Image
+                src={viewingImage.image.url}
+                alt={`${viewingImage.product.categoryName} - ${viewingImage.product.productType} - Image ${viewingImage.imageIndex + 1}`}
+                fill
+                className="object-contain"
+                sizes="100vw"
+                priority
+              />
+              {/* Custom Close Button */}
+              <DialogClose className="absolute top-4 right-4 z-50 rounded-full bg-black/50 hover:bg-black/70 text-white p-2 opacity-80 hover:opacity-100 transition-opacity backdrop-blur-sm">
+                <X className="h-6 w-6" />
+                <span className="sr-only">Close</span>
+              </DialogClose>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   )
 }
