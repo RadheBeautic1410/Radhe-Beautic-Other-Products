@@ -3,7 +3,10 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { SiteHeader } from '@/components/site-header'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import Image from 'next/image'
+import { Download, CheckSquare, Square } from 'lucide-react'
 import { getProductTypeDisplayName, getProductSubTypeDisplayName } from '@/lib/data/product-types'
 
 interface ProductImage {
@@ -50,10 +53,141 @@ function getVisibleImages(product: OtherProduct): ProductImage[] {
   }) as ProductImage[]
 }
 
+// Helper function to get file extension from URL
+function getFileExtensionFromUrl(url: string): string {
+  try {
+    // Remove query parameters and hash
+    const urlWithoutParams = url.split('?')[0].split('#')[0]
+    // Get the last part after the last dot
+    const lastDotIndex = urlWithoutParams.lastIndexOf('.')
+    if (lastDotIndex !== -1 && lastDotIndex < urlWithoutParams.length - 1) {
+      const ext = urlWithoutParams.substring(lastDotIndex + 1).toLowerCase()
+      // Validate it's a common image extension
+      const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg']
+      if (validExtensions.includes(ext)) {
+        return ext === 'jpeg' ? 'jpg' : ext // Normalize jpeg to jpg
+      }
+    }
+  } catch (error) {
+    console.error('Error parsing URL extension:', error)
+  }
+  return 'jpg' // Default fallback
+}
+
+// Helper function to get extension from MIME type
+function getExtensionFromMimeType(mimeType: string): string {
+  const mimeMap: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg',
+    'image/png': 'png',
+    'image/gif': 'gif',
+    'image/webp': 'webp',
+    'image/bmp': 'bmp',
+    'image/svg+xml': 'svg',
+  }
+  return mimeMap[mimeType.toLowerCase()] || 'jpg'
+}
+
+// Utility function to download a single image
+async function downloadImage(url: string, filename: string) {
+  try {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    
+    // Get extension from MIME type (more accurate than URL)
+    const mimeType = blob.type || response.headers.get('content-type') || ''
+    const extensionFromMime = getExtensionFromMimeType(mimeType)
+    
+    // Remove any existing extension and add the correct one from MIME type
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, '')
+    const finalFilename = `${nameWithoutExt}.${extensionFromMime}`
+    
+    const blobUrl = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.download = finalFilename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error('Error downloading image:', error)
+    alert('Failed to download image. Please try again.')
+  }
+}
+
+// Utility function to download multiple images as a zip
+async function downloadMultipleImages(urls: Array<{ url: string; filename: string }>) {
+  try {
+    // For multiple downloads, we'll download them sequentially with a small delay
+    // Note: For better UX with many images, you might want to use a library like JSZip
+    // but for simplicity, we'll download them one by one
+    for (let i = 0; i < urls.length; i++) {
+      await downloadImage(urls[i].url, urls[i].filename)
+      // Small delay between downloads to avoid overwhelming the browser
+      if (i < urls.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 300))
+      }
+    }
+  } catch (error) {
+    console.error('Error downloading images:', error)
+    alert('Failed to download some images. Please try again.')
+  }
+}
+
 // Component for individual image card - each image gets its own card
-function ImageCard({ product, image, imageIndex }: { product: OtherProduct; image: ProductImage; imageIndex: number }) {
+function ImageCard({ 
+  product, 
+  image, 
+  imageIndex, 
+  cardKey,
+  isSelected,
+  onSelect,
+  onDownload
+}: { 
+  product: OtherProduct
+  image: ProductImage
+  imageIndex: number
+  cardKey: string
+  isSelected: boolean
+  onSelect: (key: string) => void
+  onDownload: (url: string, filename: string) => void
+}) {
+  const handleDownload = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const extension = getFileExtensionFromUrl(image.url)
+    const filename = `${product.categoryName}_${product.productType}_${imageIndex + 1}.${extension}`
+    onDownload(image.url, filename)
+  }
+
   return (
-    <Card className="group relative overflow-hidden bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1 rounded-2xl">
+    <Card className={`group relative overflow-hidden bg-white dark:bg-gray-800 border-2 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-1 rounded-2xl ${
+      isSelected 
+        ? 'border-purple-500 dark:border-purple-400 ring-2 ring-purple-500/50' 
+        : 'border-gray-200 dark:border-gray-700 hover:border-purple-400 dark:hover:border-purple-500'
+    }`}>
+      {/* Checkbox overlay */}
+      <div className="absolute top-2 left-2 z-10">
+        <Checkbox
+          checked={isSelected}
+          onCheckedChange={() => onSelect(cardKey)}
+          className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm"
+        />
+      </div>
+      
+      {/* Download button overlay */}
+      <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          size="icon-sm"
+          variant="secondary"
+          onClick={handleDownload}
+          className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800"
+          title="Download image"
+        >
+          <Download className="h-4 w-4" />
+        </Button>
+      </div>
+
       <div className="relative h-96 sm:h-80 md:h-64 w-full overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
         <Image
           src={image.url}
@@ -111,6 +245,7 @@ export function OtherProductDisplayPage({
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(initialProducts.length < initialTotal)
   const [skip, setSkip] = useState(initialProducts.length)
+  const [selectedImages, setSelectedImages] = useState<Set<string>>(new Set())
   const observerTarget = useRef<HTMLDivElement>(null)
 
   // Reset state when filters change
@@ -132,6 +267,7 @@ export function OtherProductDisplayPage({
     setAllImageCards(cards)
     setHasMore(initialProducts.length < initialTotal)
     setSkip(initialProducts.length)
+    setSelectedImages(new Set()) // Reset selection when filters change
   }, [filterKey, initialProducts, initialTotal])
 
   // Function to load more products
@@ -204,6 +340,50 @@ export function OtherProductDisplayPage({
     }
   }, [hasMore, loading, loadMoreProducts])
 
+  // Handle image selection
+  const handleSelectImage = useCallback((key: string) => {
+    setSelectedImages((prev) => {
+      const newSet = new Set(prev)
+      if (newSet.has(key)) {
+        newSet.delete(key)
+      } else {
+        newSet.add(key)
+      }
+      return newSet
+    })
+  }, [])
+
+  // Handle select all/deselect all
+  const handleSelectAll = useCallback(() => {
+    if (selectedImages.size === allImageCards.length) {
+      setSelectedImages(new Set())
+    } else {
+      setSelectedImages(new Set(allImageCards.map(card => card.key)))
+    }
+  }, [selectedImages.size, allImageCards])
+
+  // Handle individual download
+  const handleIndividualDownload = useCallback((url: string, filename: string) => {
+    downloadImage(url, filename)
+  }, [])
+
+  // Handle bulk download
+  const handleBulkDownload = useCallback(async () => {
+    if (selectedImages.size === 0) {
+      alert('Please select at least one image to download.')
+      return
+    }
+
+    const selectedCards = allImageCards.filter(card => selectedImages.has(card.key))
+    const downloadUrls = selectedCards.map(({ product, image, imageIndex }) => {
+      const extension = getFileExtensionFromUrl(image.url)
+      const filename = `${product.categoryName}_${product.productType}_${imageIndex + 1}.${extension}`
+      return { url: image.url, filename }
+    })
+
+    await downloadMultipleImages(downloadUrls)
+  }, [selectedImages, allImageCards])
+
 
   return (
     <>
@@ -254,19 +434,61 @@ export function OtherProductDisplayPage({
             </div>
           ) : (
             <>
-              <div className="mb-6 flex items-center justify-between">
-                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-4 py-2 rounded-full border border-purple-200 dark:border-purple-800">
-                  {allImageCards.length} {allImageCards.length === 1 ? 'image' : 'images'} found
-                  {initialTotal > allImageCards.length && ` of ${initialTotal}`}
-                </p>
+              <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 bg-white/60 dark:bg-gray-800/60 px-4 py-2 rounded-full border border-purple-200 dark:border-purple-800">
+                    {allImageCards.length} {allImageCards.length === 1 ? 'image' : 'images'} found
+                    {initialTotal > allImageCards.length && ` of ${initialTotal}`}
+                  </p>
+                  {selectedImages.size > 0 && (
+                    <p className="text-sm font-semibold text-purple-600 dark:text-purple-400 bg-purple-100/60 dark:bg-purple-900/60 px-4 py-2 rounded-full border border-purple-300 dark:border-purple-700">
+                      {selectedImages.size} selected
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSelectAll}
+                    className="gap-2"
+                  >
+                    {selectedImages.size === allImageCards.length ? (
+                      <>
+                        <Square className="h-4 w-4" />
+                        Deselect All
+                      </>
+                    ) : (
+                      <>
+                        <CheckSquare className="h-4 w-4" />
+                        Select All
+                      </>
+                    )}
+                  </Button>
+                  {selectedImages.size > 0 && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={handleBulkDownload}
+                      className="gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      <Download className="h-4 w-4" />
+                      Download Selected ({selectedImages.size})
+                    </Button>
+                  )}
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {allImageCards.map(({ product, image, imageIndex, key }) => (
                   <ImageCard
                     key={key}
+                    cardKey={key}
                     product={product}
                     image={image}
                     imageIndex={imageIndex}
+                    isSelected={selectedImages.has(key)}
+                    onSelect={handleSelectImage}
+                    onDownload={handleIndividualDownload}
                   />
                 ))}
               </div>
