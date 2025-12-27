@@ -58,21 +58,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://www.indianweargallery.in", // Update with your actual domain
-    siteName: "Radhe Beautic",
-    title: "Indian Wear Gallery - Premium Wholesale Kurtis & Ethnic Wear",
+    siteName: "Indian Wear Gallery",
+    title: "Indian Wear Gallery",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers. High-quality fabrics, competitive prices, exclusive designs.",
     images: [
       {
         url: "/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg",
         width: 1200,
         height: 630,
-        alt: "Indian Wear Gallery - Premium Wholesale Kurtis Store",
+        alt: "Indian Wear Gallery",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Indian Wear Gallery - Premium Wholesale Kurtis & Ethnic Wear",
+    title: "Indian Wear Gallery",
     description: "Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers.",
     images: ["/stack-of-designer-kurtis-folded-neatly-wholesale-s.jpg"],
     creator: "@radhebeautic", // Update with your actual Twitter handle

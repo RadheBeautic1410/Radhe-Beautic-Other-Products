@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Indian Wear Gallery - Premium Wholesale Kurtis',
+    name: 'Indian Wear Gallery',
     short_name: 'Indian Wear Gallery',
     description: 'Premium wholesale Kurtis, Anarkali, Palazzo Sets, and ethnic wear for retailers and resellers',
     start_url: '/',
