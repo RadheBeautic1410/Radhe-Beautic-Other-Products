@@ -7,7 +7,7 @@ export const productTypes = [
   { key: "lehenga", value: "Lehenga" },
   { key: "threePiece", value: "3 Piece" },
   { key: "kurtiPant", value: "Kurti Pant" },
-  { key: "gaune", value: "Gaune" },
+  { key: "gown", value: "Gown" },
   { key: "tunique", value: "Tunique" },
   { key: "chaniya", value: "Chaniya" },
   { key: "dupatta", value: "Dupatta" },
@@ -28,7 +28,7 @@ export const productSubTypes: Record<
 > = {
   sadi: [
     { key: "cotton-saree", value: "Cotton Saree" },
-    { key: "dola-saree", value: "Silk Saree" },
+    { key: "dola-saree", value: "Dola Saree" },
     { key: "bandhani-saree", value: "Bandhani Saree" },
     { key: "gaji-silk-saree", value: "Gaji Silk Saree" },
     { key: "cotton-silk-saree", value: "Cotton Silk saree" },
@@ -61,8 +61,8 @@ export const productSubTypes: Record<
     { key: "chaniya-blouse-duppata", value: "Chaniya Blouse Duppata" },
   ],
   gaune: [
-    { key: "gaune", value: "Only Gaune" },
-    { key: "gaune-duppata", value: "Gaune Duppata" },
+    { key: "gown", value: "Only Gown" },
+    { key: "gown-duppata", value: "Gown Duppata" },
   ],
   other: [],
 };
